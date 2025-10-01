@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <body style="font-family: system-ui; padding: 16px;">
+    <h2>Google Sheet POST test</h2>
+    <button id="go">Send Test Row</button>
+    <pre id="out"></pre>
+
+   <script>
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxIuv2TYJaFXxr2UCSdcFHUszDfADwb84ctao3uU41h8FmUksM5RZCdNhVBZkLNPfUpxQ/exec";
+
+  document.getElementById('go').onclick = async () => {
+    const payload = {
+      eventName: "Test Fair",
+      date: "2025-09-29",
+      location: "Booth Z-9",
+      grossSales: 100,
+      discountsGiven: 5,
+      totalRevenue: 95,
+      salesOrderNumber: "SO-TEST-1",
+      orderDate: "2025-09-29",
+      total: 95,
+      lines: [{ name: "Sticker Pack", qty: 2 }, { name: "Tote", qty: 1 }]
+    };
+
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },   // <-- key change
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json().catch(() => ({}));
+      document.getElementById('out').textContent = JSON.stringify(json, null, 2);
+    } catch (e) {
+      document.getElementById('out').textContent = String(e);
+    }
+  };
+</script>
+
+  </body>
+</html>

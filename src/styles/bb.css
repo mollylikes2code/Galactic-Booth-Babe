@@ -1,0 +1,190 @@
+/* ===== Galactic Booth Babe — Sales UI skin (Booth Babe 2.0 vibes) ===== */
+:root{
+  --bb-bg:        #f3f6fb;
+  --bb-mint:      #def5e6;
+  --bb-mint-2:    #cfeede;
+  --bb-ink:       #263043;
+  --bb-ink-2:     #556074;
+  --bb-accent:    #8a7df0;  /* lavender */
+  --bb-accent-2:  #66d6ff;  /* aqua */
+  --bb-danger:    #e05661;
+  --bb-ring:      #a7e3ff;
+  --bb-white:     #ffffff;
+
+  --bb-radii:     20px;
+  --bb-radii-lg:  28px;
+  --bb-gutter:    12px;
+
+  --bb-shadow-1:  0 8px 30px rgba(20,30,55,.12);
+  --bb-shadow-2:  inset 0 0 0 1px rgba(20,30,55,.08);
+}
+
+/* -------- App chrome / frame -------- */
+.bb-wallpaper{
+  min-height:100dvh;
+  background:
+    radial-gradient(1200px 1200px at 10% -10%, rgba(138,125,240,.17), transparent 60%),
+    radial-gradient(1000px 900px at 120% 40%, rgba(102,214,255,.18), transparent 60%),
+    linear-gradient(180deg, var(--bb-bg), #eaf0f8 60%, #e8eef7);
+}
+
+.bb-frame{
+  max-width: 420px;
+  margin: 16px auto;
+  border-radius: var(--bb-radii-lg);
+  background: var(--bb-white);
+  box-shadow: var(--bb-shadow-1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bb-frame-inner-halo{
+  pointer-events:none;
+  position:absolute; inset:0;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.6),
+              inset 0 0 80px rgba(138,125,240,.12);
+  border-radius: inherit;
+}
+
+.bb-header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 10px 12px;
+  background: linear-gradient(180deg,#ffffff, #f7f9fe);
+  border-bottom: 1px solid rgba(38,48,67,.06);
+}
+
+.bb-titlebar{
+  display:flex; align-items:center; gap:8px;
+  font-weight:700; color:var(--bb-ink);
+}
+
+/* -------- Content layout -------- */
+.bb-card{
+  background: var(--bb-mint);
+  border-radius: var(--bb-radii);
+  padding: 14px;
+  box-shadow: var(--bb-shadow-2);
+}
+
+.bb-pane{
+  display:flex; flex-direction:column; gap: 12px;
+  max-height: calc(100dvh - 130px);
+  overflow:auto;
+  scroll-padding: 12px;
+}
+
+/* Pretty, unobtrusive scrollbars */
+.bb-pane::-webkit-scrollbar{ height:10px; width:10px; }
+.bb-pane::-webkit-scrollbar-thumb{
+  background: rgba(38,48,67,.15); border-radius: 999px;
+}
+
+/* -------- Forms -------- */
+.bb-form{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 10px 12px;
+}
+
+.bb-field{ display:flex; flex-direction:column; gap:6px; }
+
+.bb-label{
+  font-size: 12px;
+  letter-spacing:.2px;
+  color: var(--bb-ink-2);
+  font-weight: 600;
+}
+
+.bb-input, .bb-select{
+  appearance:none;
+  background: var(--bb-white);
+  border: 1px solid rgba(38,48,67,.12);
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--bb-ink);
+  outline: none;
+  transition: box-shadow .15s ease, border-color .15s ease, transform .02s ease;
+}
+
+.bb-input:focus, .bb-select:focus{
+  border-color: var(--bb-ring);
+  box-shadow: 0 0 0 3px rgba(102,214,255,.25);
+}
+
+/* -------- Action rows -------- */
+.bb-actions{
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+}
+
+/* -------- Buttons -------- */
+.bb-btn{
+  border: 0;
+  border-radius: 16px;
+  padding: 10px 14px;
+  background: #e9edf5;
+  color: var(--bb-ink);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .06s ease, filter .2s ease, background .2s ease;
+}
+.bb-btn:active{ transform: translateY(1px) scale(.995); }
+
+.bb-btn.primary{
+  background: linear-gradient(180deg, var(--bb-accent), #766ae9);
+  color: white;
+  box-shadow: 0 6px 18px rgba(138,125,240,.35);
+}
+.bb-btn.primary:hover{ filter: brightness(1.05); }
+
+.bb-btn.danger{
+  background: linear-gradient(180deg, #ff848e, var(--bb-danger));
+  color:#fff;
+  box-shadow: 0 6px 18px rgba(224,86,97,.35);
+}
+
+.bb-btn.ghost{
+  background: transparent;
+  color: var(--bb-ink-2);
+  border: 1px dashed rgba(38,48,67,.25);
+}
+
+/* -------- Lists / cart -------- */
+.bb-list{ display:flex; flex-direction:column; gap:10px; }
+
+.bb-list-item{
+  background: var(--bb-white);
+  border: 1px solid rgba(38,48,67,.08);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 1px 0 rgba(38,48,67,.05);
+}
+
+.bb-row{
+  display:flex; align-items:center; justify-content:space-between; gap: 8px;
+}
+
+.bb-pill{
+  display:inline-flex; align-items:center; justify-content:center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fff, #f2f5ff);
+  border: 1px solid rgba(38,48,67,.12);
+  font-weight:700; font-size: 13px; color: var(--bb-ink);
+}
+
+/* -------- Totals / text helpers -------- */
+.total{ font-weight:800; color: var(--bb-ink); }
+p, .bb-help { color: var(--bb-ink-2); }
+
+/* -------- Responsive (mobile-first) -------- */
+/* Keep everything readable at 360px; widen form into two cols > 520px */
+@media (min-width:520px){
+  .bb-form{
+    grid-template-columns: 1fr 120px auto; /* product | qty | button row */
+    align-items:end;
+  }
+  .bb-form .bb-field:nth-child(1){ grid-column:1 / span 1; }
+  .bb-form .bb-field:nth-child(2){ grid-column:2 / span 1; }
+  .bb-form .bb-actions{ grid-column:3 / span 1; justify-content:flex-end; }
+}

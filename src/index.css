@@ -1,0 +1,344 @@
+/* =========================
+   Pastel Galaxy Polish Pack (trimmed for app-nav)
+   ========================= */
+
+/* Base canvas + typography */
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  background:
+    url("/src/components/starrywallpaper.png") center/cover no-repeat,
+    radial-gradient(1000px 600px at 20% -10%, #ffe7ff 0%, transparent 60%),
+    radial-gradient(800px 520px at 90% 10%,  #e6f7ff 0%, transparent 60%),
+    linear-gradient(180deg, #f7f4ff, #f1f6ff 60%, #f7f4ff);
+
+  background-blend-mode: lighten, normal, normal, normal;
+}
+
+
+a { color: #6a56ff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Container helpers */
+.container { width: min(100%, 1100px); margin: 0 auto; padding: 12px; }
+.grid { max-width: 940px; margin: 0 auto; padding: 16px; }
+
+/* Cards */
+.card{
+  background:#fff;
+  border:1px solid #e7e1ff;
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow:
+    0 10px 24px rgba(102, 85, 196, .10),
+    inset 0 0 0 1px rgba(255,255,255,.7);
+  overflow: hidden;
+}
+
+/* Headings + labels */
+h2, h3 { margin: 0 0 10px; letter-spacing: .2px; font-weight: 900; color: #3a2f5e; }
+.label { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color:#7e78a5; }
+
+/* Inputs/selects */
+.select, .input{
+  height: 38px; width: 100%; min-width: 0;
+  border-radius: 12px; border: 1px solid #dad3ff;
+  background: #f4f2ff; color:#3a2f5e; padding: 0 12px;
+  transition: border .15s, box-shadow .15s, background .15s;
+}
+.select:focus, .input:focus{
+  outline: none; background: #fff;
+  border-color: #a79cff;
+  box-shadow: 0 0 0 4px rgba(167,156,255,.20);
+}
+/* custom arrow */
+.select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #6a56ff 50%),
+    linear-gradient(135deg, #6a56ff 50%, transparent 50%),
+    linear-gradient(#e8e3ff, #e8e3ff);
+  background-position:
+    calc(100% - 18px) calc(50% - 2px),
+    calc(100% - 12px) calc(50% - 2px),
+    calc(100% - 32px) 50%;
+  background-size: 6px 6px, 6px 6px, 1px 70%;
+  background-repeat: no-repeat;
+}
+.input.qty { width: 86px; text-align:center; }
+.input.price { width: 120px; text-align:right; }
+
+/* hide number spinners */
+.input[type="number"]::-webkit-outer-spin-button,
+.input[type="number"]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+.input[type="number"]{ -moz-appearance: textfield; appearance: none; }
+
+/* Buttons */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  height:38px; padding:0 16px; gap:8px;
+  border-radius: 16px; border: 1px solid #dad3ff;
+  background:#f2efff; color:#3a2f5e; cursor:pointer;
+  transition: transform .05s, filter .15s, background .15s, border .15s;
+}
+.btn:hover { filter: brightness(1.04); }
+.btn:active { transform: translateY(1px); }
+.btn-primary{
+  color:#fff; background: linear-gradient(180deg,#8e7bff,#6a56ff);
+  border-color:#6a56ff; text-shadow: 0 1px 0 rgba(0,0,0,.14);
+}
+.btn-danger{ color:#8f1f3f; background:#ffe6ed; border-color:#ffc8d6; }
+.btn.qty-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: none;
+  background: #00a0dc; color: #fff; font-size: 20px; font-weight: bold;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.2s ease;
+}
+.btn.qty-btn:hover { background: #008bbd; }
+.btn.qty-btn:active { background: #007aa5; }
+
+/* Utility rows */
+.inline{ display:flex; gap:8px; flex-wrap:wrap; justify-content: space-around; }
+.row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+
+/* AppShell layout (content + bottom nav) */
+.app-shell {
+  display: grid;
+  grid-template-rows: 1fr auto;   /* content + bottom nav */
+  min-height: 100dvh;
+}
+.app-main { min-height: 100%; }  /* keeps Outlet visible */
+
+.app-nav {
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 equal chunks (25% each) */
+  justify-items: center;                 /* center icon inside each chunk */
+  align-items: center;
+  padding: 10px 0;
+  background: #fff;
+  border-top: 1px solid #ece7ff;
+  box-shadow: 0 -10px 24px rgba(102,85,196,.12);
+  width: 100%;
+  z-index: 10;
+}
+.app-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;          /* <-- make it circular */
+  padding: 8px;
+  transition: box-shadow 0.2s ease;
+}
+
+.app-nav a:focus,
+.app-nav a:hover {
+  box-shadow: 0 0 10px 4px rgba(162, 121, 255, 0.6); /* glowing circle */
+  outline: none;                                     /* remove square outline */
+}
+.app-nav a:focus {
+  outline: none; /* remove default square outline */
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(162, 121, 255, 0.6); /* circular glow */
+}
+
+
+
+
+.app-nav-link {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+  text-decoration: none;
+  font-size: 12px;
+  color: #5a4aa3;
+  padding: 6px 8px;
+  border-radius: 12px;
+}
+
+.nav-icon {
+  width: 32px; height: 32px;            /* 64px source → crisp 2× */
+  object-fit: contain;
+  image-rendering: auto;
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+.app-nav-link:hover .nav-icon {
+  transform: translateY(-1px) scale(1.03);
+  filter: drop-shadow(0 0 4px rgba(216, 180, 255, 0.6));
+}
+.app-nav-link.is-active .nav-icon {
+  transform: translateY(-2px) scale(1.06);
+  filter:
+    drop-shadow(0 0 6px rgba(255, 200, 255, 0.8))
+    drop-shadow(0 0 10px rgba(170, 150, 255, 0.6));
+}
+.app-nav-link.is-active .nav-label {
+  font-weight: 600;
+  color: #4a3aa0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-icon { transition: none; }
+}
+
+/* Sales page: mobile-first layouts */
+.sales-form {
+  display: grid; gap: 10px; grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .sales-form {
+    grid-template-columns:
+      minmax(0, 1fr)                 /* product */
+      minmax(0, 1fr)                 /* fabric */
+      clamp(80px, 12vw, 110px)       /* qty */
+      clamp(130px, 16vw, 180px);     /* add */
+    align-items: end;
+  }
+}
+
+/* Cart header */
+.cart-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 12px; margin: 6px 0 12px;
+  background:#c9f3ec; color:#2e4d49;
+  border:1px solid #a4e6dc; border-radius:12px;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.7);
+  font-weight: 800; letter-spacing:.3px;
+  overflow: hidden;
+}
+
+/* Cart rows: mobile stack → 5 cols at 640px */
+.cart-item {
+  display: grid; gap: 10px; align-items: center;
+  grid-template-areas:
+    "name" "price" "qty" "total" "del";
+  grid-template-columns: 1fr;
+}
+.cart-item .item-name   { grid-area: name;  min-width: 0; }
+.cart-item .input.price { grid-area: price; width: 100%; min-width: 0; }
+.cart-item .input.qty   { grid-area: qty;   width: 100%; min-width: 0; }
+.cart-item .line-total  { grid-area: total; justify-self: end; white-space: nowrap; text-align: right; }
+.cart-item .del         { grid-area: del;   justify-self: end; }
+
+@media (min-width: 640px) {
+  .cart-item {
+    grid-template-areas: "name price qty total del";
+    grid-template-columns:
+      minmax(0, 1fr)
+      clamp(120px, 18vw, 180px)
+      clamp(86px, 12vw, 120px)
+      clamp(90px, 14vw, 120px)
+      42px;
+  }
+}
+
+.totals-panel { margin-top: 12px; }
+.footer-actions { display: flex; justify-content: center; }
+.footer-actions .btn-primary { width: clamp(180px, 40vw, 240px); }
+
+/* Product Settings page */
+.ps-form { display: grid; gap: 10px; grid-template-columns: 1fr; }
+@media (min-width: 640px) {
+  .ps-form {
+    grid-template-columns:
+      1fr
+      clamp(110px, 20vw, 200px)
+      clamp(120px, 24vw, 220px)
+      clamp(110px, 20vw, 160px);
+    align-items: end;
+  }
+}
+.ps-item {
+  display: grid; gap: 10px; align-items: center; grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .ps-item {
+    grid-template-columns:
+      minmax(0, 1fr)
+      clamp(90px, 16vw, 160px)
+      clamp(120px, 24vw, 220px)
+      clamp(86px, 14vw, 110px);
+  }
+}
+/* Hide redundant series tags inside the Fabrics Library card only */
+.fabrics-card .fabric-meta {
+  display: none !important;
+}
+/* ----- Galactic Booth Babe: Background ----- */
+/* If you use CSS variables elsewhere, feel free to merge these with your :root */
+:root{
+  --gbb-bg-1: #0b0618; /* deep navy */
+  --gbb-bg-2: #1a0f3b; /* indigo */
+  --gbb-bg-3: #2b135a; /* violet */
+  --gbb-hotpink: #ff4dc4; /* accent */
+  --gbb-violet:  #a78bfa; /* accent */
+}
+
+/* Body background uses LAYERED backgrounds:
+   1) radial sparkle glow (lightens)
+   2) dark color wash (darkens & unifies)
+   3) your wallpaper image, tiled smaller for more detail
+*/
+html, body {
+  min-height: 100%;
+  background-color: var(--gbb-bg-1);
+  background-image:
+    /* 1) soft radial glows for the magical vibe */
+    radial-gradient(1200px 700px at 50% -10%, rgba(255, 77, 196, 0.20), transparent 65%),
+    radial-gradient(900px 600px at 85% 115%, rgba(167, 139, 250, 0.18), transparent 60%),
+
+    /* 2) a subtle dark wash to push navy/purple */
+    linear-gradient(180deg, rgba(43, 19, 90, 0.85), rgba(11, 6, 24, 0.92)),
+
+    /* 3) the wallpaper (lower layer) */
+    url("/src/components/starrywallpaper.png");
+  /* Order matters: the last image is the bottom layer */
+
+  /* Make the wallpaper “smaller” so its details show */
+  background-size:
+    auto,                       /* radials auto */
+    auto,                       /* radials auto */
+    cover,                      /* dark wash covers */
+    700px auto;                 /* <-- tile size for the wallpaper */
+
+  background-repeat:
+    no-repeat,
+    no-repeat,
+    no-repeat,
+    repeat;                     /* tile the wallpaper */
+
+  background-position:
+    center -10vh,
+    85% 110%,
+    center,
+    center;
+
+  /* Blend the layers so gradient stays visible while the wallpaper is subtle */
+  background-blend-mode:
+    screen,                     /* glow lightens */
+    screen,                     /* glow lightens */
+    multiply,                   /* dark wash unifies/lowers brightness */
+    normal;
+
+  /* Keep the parallaxy feel subtle and crisp while scrolling */
+  background-attachment:
+    fixed,
+    fixed,
+    fixed,
+    fixed;
+}
+
+/* Optional: on very small screens, reduce wallpaper scale a bit more */
+@media (max-width: 480px) {
+  html, body {
+    background-size:
+      auto,
+      auto,
+      cover,
+      600px auto; /* slightly tighter tiling on phones */
+  }
+}
