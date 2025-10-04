@@ -1,52 +1,43 @@
 // src/pages/ProductSettings.jsx
-import { useState, useMemo } from "react";
-import { useSales } from "@/state/sales.jsx";
+import { useMemo, useState } from "react";
+import { useSales } from "@/state/sales.jsx"; // keep your existing hook import
 
 const UNITS = ["each", "bulk"];
-
-// All 4 columns flexible: no fixed width
-const GRID_COLS = "minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr)";
 
 export default function ProductSettings() {
   const {
     productTypes = [],
     addProductType,
-    updateProductType,
     removeProductType,
   } = useSales();
 
+  // --- Add New Product (stacked form) ---
   const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState("");
   const [unitLabel, setUnitLabel] = useState("each");
-  const [customUnit, setCustomUnit] = useState("");
 
-  const isCustom = unitLabel === "custom";
-  const resolvedUnit = isCustom ? (customUnit.trim() || "each") : unitLabel;
-
-  const onAdd = () => {
+  const onAdd = (e) => {
+    e?.preventDefault?.();
     const clean = name.trim();
     if (!clean) return;
     addProductType({
       name: clean,
-      defaultPrice: +price || 0,
-      unitLabel: resolvedUnit,
+      defaultPrice: Number(price) || 0,
+      unitLabel,
       isActive: true,
     });
-    setName(""); setPrice(0); setUnitLabel("each"); setCustomUnit("");
+    setName("");
+    setPrice("");
+    setUnitLabel("each");
   };
 
-  const pageStyle = {
-    gap: 16,
-    maxWidth: 900,
-    margin: "0 auto",
-    padding: 12,
-    overflowX: "hidden",
-  };
+  const TYPES = useMemo(() => productTypes ?? [], [productTypes]);
 
+  // shared row grid (no fixed widths; wraps cleanly on small screens)
   const rowGrid = {
     display: "grid",
     gap: 8,
-    gridTemplateColumns: GRID_COLS,
+    gridTemplateColumns: "minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) auto",
     alignItems: "center",
   };
 
@@ -55,176 +46,104 @@ export default function ProductSettings() {
     textTransform: "uppercase",
     letterSpacing: "0.06em",
     opacity: 0.85,
-    textAlign: "left",
     whiteSpace: "nowrap",
   };
 
-  const stickyHeader = {
-    position: "sticky",
-    top: 0,
-    zIndex: 1,
-    background:
-      "linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.85))",
-    backdropFilter: "blur(6px)",
-    padding: "6px 6px 8px",
-    borderBottom: "1px solid rgba(0,0,0,.06)",
-  };
-
-  const inputFull = { width: "100%", boxSizing: "border-box", minWidth: 0 };
-
-  const TYPES = useMemo(() => productTypes ?? [], [productTypes]);
-
   return (
-    <main className="grid" style={pageStyle}>
-      {/* Create new product type */}
-      <section className="card" style={{ padding: 12, overflowX: "hidden" }}>
-        <div style={stickyHeader}>
-          <div className="row" style={rowGrid}>
-            <div className="label" style={headerCell}>New Product</div>
-            <div className="label" style={headerCell}>default price</div>
-            <div className="label" style={headerCell}>Unit of measurement</div>
-            
+    <main className="wrap" style={{ overflowX: "hidden" }}>
+      {/* ---------- New Product (STACKED) ---------- */}
+      <section className="card" style={{ overflow: "hidden" }}>
+        <h2 style={{ marginBottom: 12 }}>New Product</h2>
+
+        <form onSubmit={onAdd} className="grid" style={{ gap: 10 }}>
+          <div className="row">
+            <label>Name:</label>
+            <input
+              className="input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Name (e.g., Keychain)"
+            />
           </div>
-        </div>
 
-        <div className="row" style={{ ...rowGrid, marginTop: 8 }}>
-          <input
-            className="input"
-            style={inputFull}
-            placeholder="Name (e.g., Keychain)"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+          <div className="row">
+            <label>Default Price:</label>
+            <input
+              className="input"
+              type="number"
+              step="0.01"
+              min="0"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="0.00"
+            />
+          </div>
 
-          <input
-            className="input"
-            style={inputFull}
-            type="number"
-            min="0"
-            step="0.01"
-            placeholder="Default $"
-            value={price}
-            onChange={(e) => setPrice(+e.target.value || 0)}
-          />
-
-          <div className="inline" style={{ gap: 8, minWidth: 0 }}>
+          <div className="row">
+            <label>Unit of Measurement:</label>
             <select
               className="select"
               value={unitLabel}
               onChange={(e) => setUnitLabel(e.target.value)}
-              style={{ ...inputFull }}
             >
               {UNITS.map((u) => (
-                <option key={u} value={u}>{u}</option>
+                <option key={u} value={u}>
+                  {u}
+                </option>
               ))}
-              <option value="custom">custom…</option>
             </select>
-            {isCustom && (
-              <input
-                className="input"
-                style={{ width: 140, maxWidth: "100%" }}
-                placeholder='e.g., "pair"'
-                value={customUnit}
-                onChange={(e) => setCustomUnit(e.target.value)}
-              />
-            )}
           </div>
 
-          <button className="btn btn-primary" onClick={onAdd}>Add</button>
-        </div>
+          <div className="inline" style={{ justifyContent: "flex-end" }}>
+            <button className="primary" type="submit">
+              Add
+            </button>
+          </div>
+        </form>
       </section>
 
-      {/* Existing product types */}
-      <section
-        className="card"
-        style={{ padding: 12, overflowX: "hidden", overflowY: "auto" }}
-      >
-        <div style={stickyHeader}>
-          <div className="row" style={rowGrid}>
-            <div className="label" style={headerCell}>Name</div>
-            <div className="label" style={headerCell}>Default Price</div>
-            <div className="label" style={headerCell}>Unit</div>
-            <div className="label" style={{ ...headerCell, textAlign: "right" }}>Actions</div>
-          </div>
+      {/* ---------- Existing Types (READ-ONLY + DELETE) ---------- */}
+      <section className="card" style={{ overflowX: "hidden" }}>
+        <div className="row" style={{ ...rowGrid, marginBottom: 6 }}>
+          <div style={headerCell}>Name</div>
+          <div style={headerCell}>Price</div>
+          <div style={headerCell}>Unit</div>
+          <div style={{ ...headerCell, textAlign: "right" }}>Actions</div>
         </div>
 
-        <div className="grid" style={{ gap: 8, marginTop: 8 }}>
-          {TYPES.map((p, i) => {
-            const normalized = String(p.unitLabel || "each").toLowerCase();
-            const showCustom = normalized !== "each" && normalized !== "bulk";
+        <div className="grid" style={{ gap: 8 }}>
+          {TYPES.length === 0 && (
+            <p className="muted">No product types yet.</p>
+          )}
 
-            return (
-              <div key={p.id ?? `type-${i}`} className="row" style={rowGrid}>
-                <input
-                  className="input"
-                  style={inputFull}
-                  value={p.name}
-                  onChange={(e) => updateProductType(p.id, { name: e.target.value })}
-                />
+          {TYPES.map((p, i) => (
+            <div
+              key={p.id ?? `type-${i}`}
+              className="row"
+              style={{
+                ...rowGrid,
+                padding: "8px 10px",
+                borderRadius: 12,
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+              }}
+            >
+              {/* READ-ONLY cells (no inline editing) */}
+              <div style={{ minWidth: 0, overflowWrap: "anywhere" }}>{p.name}</div>
+              <div>${Number(p.defaultPrice || 0).toFixed(2)}</div>
+              <div>{String(p.unitLabel || "each")}</div>
 
-                <input
-                  className="input"
-                  style={inputFull}
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  value={p.defaultPrice}
-                  onChange={(e) =>
-                    updateProductType(p.id, { defaultPrice: +e.target.value || 0 })
-                  }
-                />
-
-                <select
-                  className="select"
-                  style={inputFull}
-                  value={showCustom ? "custom" : normalized}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    if (v === "custom") {
-                      updateProductType(p.id, { unitLabel: p.unitLabel || "each" });
-                    } else {
-                      updateProductType(p.id, { unitLabel: v });
-                    }
-                  }}
+              <div className="inline" style={{ justifyContent: "flex-end" }}>
+                <button
+                  className="danger"
+                  onClick={() => removeProductType(p.id)}
+                  title="Delete"
                 >
-                  {UNITS.map((u) => (
-                    <option key={u} value={u}>{u}</option>
-                  ))}
-                  <option value="custom">custom…</option>
-                </select>
-
-                <button className="btn btn-danger" onClick={() => removeProductType(p.id)}>
                   Delete
                 </button>
-
-                {showCustom && (
-                  <div
-                    className="inline"
-                    style={{ marginTop: 8, gridColumn: "1 / -1", gap: 8 }}
-                  >
-                    <span className="label">Custom unit label:</span>
-                    <input
-                      className="input"
-                      style={{ width: 200, maxWidth: "100%" }}
-                      defaultValue={p.unitLabel}
-                      placeholder='e.g., "pair"'
-                      onBlur={(e) =>
-                        updateProductType(p.id, {
-                          unitLabel: (e.target.value || "each").trim(),
-                        })
-                      }
-                    />
-                  </div>
-                )}
               </div>
-            );
-          })}
-
-          {!TYPES.length && (
-            <p className="label" style={{ opacity: 0.8 }}>
-              No product types yet.
-            </p>
-          )}
+            </div>
+          ))}
         </div>
       </section>
     </main>
